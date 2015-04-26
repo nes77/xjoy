@@ -36,7 +36,9 @@ public:
     FILE* get() {
         return file;
     }
-}; 
+};
+
+
 
 #endif	/* XJOY_UTILS_HPP */
 

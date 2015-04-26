@@ -1,8 +1,10 @@
+VERSION = 0.1
+
 CXX = g++
 CC = gcc
-CXXFLAGS = -std=gnu++11 
+CXXFLAGS = -std=c++11 
 CFLAGS = -std=gnu11
-COMMONFLAGS = -Wall -Werror -Wfatal-errors -g -O0 -fPIC
+COMMONFLAGS = -Wall -Werror -Wfatal-errors -g -O0 -fPIC -DXJOY_VERSION=\"$(VERSION)\"
 MKDIR_P = mkdir -p
 
 OUTDIR = ./bin
@@ -10,7 +12,6 @@ OBJDIR = ./obj
 SRCDIR = ./src
 INCDIRS = . ./includes $(BOOST_INCLUDES)
 LIBDIRS = $(BOOST_LIBS)
-VERSION = 0.1
 
 LIBS = boost_thread boost_system pthread
 

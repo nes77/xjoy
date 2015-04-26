@@ -20,25 +20,27 @@
 #include "xjoy.h"
 #include "xjoy_utils.hpp"
 
+
+
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <boost/chrono.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <string>
-#include <unordered_map>
+
 #include <algorithm>
 #include <memory>
 #include <queue>
-
 #include <cstring>
 #include <cstdlib>
-#include <cerrno>
 #include <cstdio>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/time.h>
+
 
 using namespace std;
+
+const char* lib_id =
+    "libxjoy ver " XJOY_VERSION " C 2015 Nicholas Samson under Apache License 2.0";
 
 static boost::mutex xjoy_kill_all_access;
 static boost::mutex xjoy_rtu_queue_access;
@@ -50,7 +52,7 @@ static boost::condition_variable xjoy_packet_available;
 
 static std::unique_ptr<boost::thread_group> xjoy_threads_ptr;
 
-static unordered_map<uint32_t, xjoy_callback_func> xjoy_callbacks;
+static boost::unordered_map<uint32_t, xjoy_callback_func> xjoy_callbacks;
 static queue<xjoy_controller_state_update> xjoy_reader_to_updater;
 static queue<xjoy_packed_update_t> xjoy_updater_to_dispatch;
 
@@ -68,7 +70,7 @@ extern "C" {
         boost::lock_guard<boost::mutex> lg(xjoy_kill_all_access);
         xjoy_killed = false;
         
-        xjoy_callbacks = unordered_map<uint32_t, xjoy_callback_func>();
+        xjoy_callbacks = boost::unordered_map<uint32_t, xjoy_callback_func>();
         xjoy_reader_to_updater = queue<xjoy_controller_state_update>();
         xjoy_updater_to_dispatch = queue<xjoy_packed_update_t>();
         
@@ -160,6 +162,13 @@ extern "C" {
     }
 }
 
+#ifndef WIN32
+
+#include <cerrno>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+
 int
 input_timeout (int filedes, unsigned int seconds)
 {
@@ -219,6 +228,8 @@ void xjoy::read_xjoy_stream(string filename) {
 
     }
 }
+
+#endif
 
 void xjoy::update_xjoy_global_state() {
 
@@ -409,3 +420,4 @@ void xjoy::dispatch_to_callbacks(){
     }
     
 }
+

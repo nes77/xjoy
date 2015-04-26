@@ -67,7 +67,7 @@
 extern "C" {
 #endif
 
-    
+    extern const char* lib_id;
     
     typedef struct {
         uint32_t time_stamp;
