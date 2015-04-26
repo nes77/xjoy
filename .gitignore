@@ -12,6 +12,7 @@
 *.so
 *.dylib
 *.dll
+*.so.*
 
 # Fortran module files
 *.mod
@@ -26,3 +27,6 @@
 *.exe
 *.out
 *.app
+
+nbproject/
+
